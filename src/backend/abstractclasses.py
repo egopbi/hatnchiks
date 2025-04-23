@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
-from pydantic_schema import CardSchema
+from src.schemas.game_schemas import CardSchema
 
 if TYPE_CHECKING:
-    from backend_models import HatService
+    from src.backend.redis import HatService
 
 
 class HatDbRepository(ABC):
