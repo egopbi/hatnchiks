@@ -7,7 +7,7 @@ from src.backend.redis import ProjectRepository
 
 router = APIRouter(tags=["Games"])
 proj = ProjectRepository()
-
+# НАДО КУДА-ТО ПЕРЕНЕСТИ
 
 @router.get("/games")
 async def get_all_games():

@@ -1,12 +1,39 @@
-import os
-from dotenv import load_dotenv
-from redis import Redis
+from pathlib import Path
 
+from dotenv import load_dotenv
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 load_dotenv()
 
-RD_HOST = os.getenv("RD_HOST")
-RD_PORT = os.getenv("RD_PORT")
-RD_DB = os.getenv("RD_DB")
+BASE_DIR = Path(__file__).parent
+SENSITIVE_DIR = BASE_DIR / "sensitive"
 
-rd = Redis(host=RD_HOST, port=RD_PORT, db=RD_DB, decode_responses=True)
+
+class DbSettings(BaseSettings):
+    url: str 
+    echo: bool
+
+
+class RdSettings(BaseSettings):
+    host: str
+    port: str
+    db: str
+
+
+class AuthJWT(BaseSettings):
+    private_key_path: Path =  SENSITIVE_DIR / "jwt" / "jwt_private.pem"
+    public_key_path: Path = SENSITIVE_DIR / "jwt" / "jwt_public.pem"
+    algorithm: str = "RS256"
+    access_token_exp_min: int = 15
+
+
+class Settings(BaseSettings):
+    db: DbSettings
+    rd: RdSettings
+    jwt: AuthJWT = Field(default_factory=AuthJWT)
+
+    model_config = SettingsConfigDict(env_file=".env", env_nested_delimiter="__" )
+
+
+settings = Settings()

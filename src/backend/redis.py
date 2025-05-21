@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from redis.asyncio import Redis
 
-from config import rd
+from config import settings
 from src.backend.abstractclasses import HatDbRepository, GameDbRepository
 from src.exceptions import *
 from src.schemas.game_schemas import CardSchema
@@ -10,8 +10,16 @@ if TYPE_CHECKING:
     from src.backend.game_services import HatService
 
 
+rd = Redis(
+    host=settings.rd.host, 
+    port=settings.rd.port, 
+    db=settings.rd.db, 
+    decode_responses=True
+)
+
+
 class HatRedisRepository(HatDbRepository):
-    def __init__(self, game_id: str, rd: Redis):
+    def __init__(self, game_id: str):
         self.game_id = game_id
         self.rd = rd
         self.hat_name = f"{self.game_id}:hat"

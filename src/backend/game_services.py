@@ -1,10 +1,10 @@
 import random
 import uuid
 
-from config import rd
 from src.backend.abstractclasses import GameDbRepository, HatDbRepository
 from src.backend.redis import GameRedisRepository, HatRedisRepository
 from src.exceptions import CardNotFound, HatEmpty, LastRoundWasEnd, NeedToReloadInfo
+from src.utils import backend_logger
 
 class HatService:
     def __init__(self, hat_redis: HatDbRepository, cards_bag: list[str]):
@@ -15,7 +15,7 @@ class HatService:
 
     @classmethod
     def create_redis(cls, game_id: str, cards_bag: list[str]):
-        return cls(hat_redis=HatRedisRepository(game_id=game_id, rd=rd), cards_bag=cards_bag)
+        return cls(hat_redis=HatRedisRepository(game_id=game_id), cards_bag=cards_bag)
 
     @classmethod
     def create_postgres(cls, game_id: str, cards_bag):
@@ -43,7 +43,7 @@ class HatService:
             return card
         
         except (HatEmpty, CardNotFound):
-            # logger.debug(f"Handled known error: {e}")
+            backend_logger.debug(f"Handled known error: {e}")
             raise
 
     async def next_round(self):
@@ -123,7 +123,7 @@ class GameService:
             await self.game_db.set_round(round_num=self.round)
             await self.hat.next_round()
         except TypeError as e:
-            # logger.debug(f"self.round is not defined: {e}")
+            backend_logger.debug(f"self.round is not defined: {e}")
             raise NeedToReloadInfo(self.game_id)
 
         # Нужен какой-то флаг извне для окончания раунда
@@ -133,7 +133,7 @@ class GameService:
             card = await self.hat.pull_card()
             return card
         except AttributeError as e:
-            # logger.debug(f"self.hat is not defined: {e}")
+            backend_logger.debug(f"self.hat is not defined: {e}")
             raise NeedToReloadInfo(self.game_id)
 
     async def delete_game(self):

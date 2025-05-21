@@ -43,6 +43,12 @@ class NeedToReloadInfo(Exception):
         super().__init__(message)
 
 
+class UnauthorizedUser(Exception):
+    def __init__(self, username: str):
+        message = f"User {username} is unauthorized"
+        super().__init__(message)
+
+
 __all__ = [
     "CardNotFound",
     "NoCardsInTheGame",
@@ -51,4 +57,5 @@ __all__ = [
     "HatDoesNotExist",
     "LastRoundWasEnd",
     "NeedToReloadInfo",
+    "UnauthorizedUser",
 ]

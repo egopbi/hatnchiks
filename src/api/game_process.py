@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends
 
-from src.api.helpers import check_for_game_start, get_game, reloader
+from src.api.helpers import get_game
 from src.backend.game_services import GameService
 from src.exceptions import HatEmpty, LastRoundWasEnd
+from src.utils import reloader, check_for_game_start
 
 
 router = APIRouter(tags=["Game Process"])

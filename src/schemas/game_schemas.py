@@ -38,10 +38,17 @@ class GameCreateSchema(BaseModel):
 class UserSchema(BaseModel):
     username: str = Field(min_length=4, max_length=20)
     password: str = Field(min_length=8, max_length=20)
+
+
+class TokenInfo(BaseModel):
+    access_token: str 
+    token_type: str
     
 
 __all__ = [
     "CardCreateGameSchema",
     "CardSchema",
     "GameCreateSchema",
+    "UserSchema",
+    "TokenInfo",
 ]
