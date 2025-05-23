@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 
 from src import auth
-from src.api.dependencies import get_db, validate_auth_user, register_user
+from src.api.dependencies import get_current_auth_user, get_db, validate_auth_user, register_user
 from src.api.helpers import get_game
 from src.backend.database import DatabaseService
 from src.models.general import User
@@ -36,13 +36,10 @@ async def auth_user_jwt(
     return TokenInfo(
         access_token=token,
         token_type="Bearer",
-    )
+    ) # А ЧТО ПОТОМ С ЭТИМ ТОКЕНОМ?
 
-
-    unauthed_exc = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="invalid username or password",
-    )
-
-
-
+@router.get("/users/me")
+async def get_user_info(
+    user: UserSchema = Depends(get_current_auth_user),
+):
+    return {"success": True, "user": user.username}
