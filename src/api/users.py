@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 
 from src import auth
-from src.api.dependencies import get_current_auth_user, get_db, validate_auth_user, register_user
+from src.dependencies import get_db, validate_auth_user, register_user
 from src.api.helpers import get_game
 from src.backend.database import DatabaseService
 from src.models.general import User
