@@ -2,6 +2,7 @@ import asyncio
 from datetime import datetime, timedelta
 
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.ext.asyncio.engine import AsyncEngine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import select
 from sqlalchemy.sql import func
@@ -16,7 +17,11 @@ from src.utils import database_logger
 
 class DatabaseService():
     def __init__(self):
-        self.engine = create_async_engine(url=settings.db.url, echo=settings.db.echo, future=True)
+        self.engine: AsyncEngine = create_async_engine(
+            url=settings.db.url,
+            echo=settings.db.echo,
+            future=True
+        )
 
         self.async_session = sessionmaker(
             bind=self.engine,
@@ -24,12 +29,8 @@ class DatabaseService():
             expire_on_commit=False
         )
 
-    @db_try_except(Exception)
-    async def create_tables(self) -> bool:
-        async with self.engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
-            database_logger.success("All metadata was created")
-            return True
+    async def dispose(self):
+        await self.engine.dispose()
 
     @db_try_except(Exception)        
     async def create_user(self, user_form: UserSchema) -> User:

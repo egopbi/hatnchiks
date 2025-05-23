@@ -13,6 +13,13 @@ SENSITIVE_DIR = BASE_DIR / "sensitive"
 class DbSettings(BaseSettings):
     url: str 
     echo: bool
+    naming_conventions: dict[str, str] = {
+        "ix": "ix_%(column_0_label)s",
+        "uq": "uq_%(table_name)s_%(column_0_name)s",
+        "ck": "ck_%(table_name)s_%(constraint_name)s" ,
+        "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+        "pk": "pk_%(table_name)s"
+    }
 
 
 class RdSettings(BaseSettings):
@@ -25,7 +32,7 @@ class AuthJWT(BaseSettings):
     private_key_path: Path =  SENSITIVE_DIR / "jwt" / "jwt_private.pem"
     public_key_path: Path = SENSITIVE_DIR / "jwt" / "jwt_public.pem"
     algorithm: str = "RS256"
-    access_token_exp_min: int = 15
+    access_token_lifetime_seconds: int = 3600
 
 
 class Settings(BaseSettings):
