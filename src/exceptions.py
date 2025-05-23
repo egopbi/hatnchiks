@@ -49,6 +49,12 @@ class UnauthorizedUser(Exception):
         super().__init__(message)
 
 
+# ПОМЕНЯТЬ НУЖНЫЕ ИСКЛЮЧЕНИЯ НА HTTP EXCEPTIONS С НУЖНЫМ СТАТУСОМ
+
+
+class InvalidTokenException(Exception):
+    pass
+
 __all__ = [
     "CardNotFound",
     "NoCardsInTheGame",
