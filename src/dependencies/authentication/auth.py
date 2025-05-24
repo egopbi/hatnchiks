@@ -1,12 +1,10 @@
-from fastapi import Depends, Form, HTTPException, status
+from fastapi import Depends
 from fastapi.security import HTTPAuthorizationCredentials
 from jwt import InvalidTokenError
 
 from src import auth
-from src.backend.database import DatabaseService, db
+from src.backend.database import db
 from src.exceptions import InvalidTokenException, UnauthorizedUser
-from src.auth import validate_password
-from src.models.general import User
 from src.schemas.game_schemas import UserSchema
 from src.utils.logger import backend_logger
 

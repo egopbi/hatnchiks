@@ -1,6 +1,6 @@
 from .database import get_db
-from .user import register_user, validate_auth_user
-from .user_manager import get_user_manager
+from .authentication.user import register_user, validate_auth_user
+from .authentication.user_manager import get_user_manager
 
 __all__ = [
     "get_db",

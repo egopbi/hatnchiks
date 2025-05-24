@@ -7,7 +7,7 @@ from src.backend.database import DatabaseService, db
 from src.dependencies.database import get_db
 from src.exceptions import InvalidTokenException, UnauthorizedUser
 from src.auth import validate_password
-from src.models.general import User
+from src.models import User
 from src.schemas.game_schemas import UserSchema
 from src.utils.logger import backend_logger
 
