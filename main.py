@@ -12,7 +12,7 @@ async def lifespan(app: FastAPI):
     # можно подключать ещё и Redis, логгеры и т.д.
     yield
     # здесь можно делать graceful shutdown, если нужно
-    await db.dispose()
+    await db.db_conn.dispose()
 
 
 app = FastAPI(default_response_class=ORJSONResponse, lifespan=lifespan)
