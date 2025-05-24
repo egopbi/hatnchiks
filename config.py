@@ -35,9 +35,15 @@ class AuthJWT(BaseSettings):
     access_token_lifetime_seconds: int = 3600
 
 
+class AccessToken(BaseSettings):
+    reset_password_token_secret: str
+    verification_token_secret: str
+
+
 class Settings(BaseSettings):
     db: DbSettings
     rd: RdSettings
+    access_token: AccessToken
     jwt: AuthJWT = Field(default_factory=AuthJWT)
 
     model_config = SettingsConfigDict(env_file=".env", env_nested_delimiter="__" )

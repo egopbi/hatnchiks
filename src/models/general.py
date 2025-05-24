@@ -1,10 +1,12 @@
-from typing import Annotated
-from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
+from typing import Annotated, TYPE_CHECKING
+from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
 from sqlalchemy.orm import DeclarativeBase, relationship, Mapped, mapped_column
 from sqlalchemy import DateTime, ForeignKey, MetaData, String
 
 from config import settings
 
+if TYPE_CHECKING:
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 str20 = Annotated[str, 20]
 
@@ -34,3 +36,9 @@ class User(Base, SQLAlchemyBaseUserTable[int]):
     username: Mapped[str20] = mapped_column(primary_key=True)
     password: Mapped[bytes]
     
+    @classmethod
+    def get_db(cls, session:"AsyncSession"):
+        return SQLAlchemyUserDatabase(
+            session=session, 
+            user_table=User
+        )
